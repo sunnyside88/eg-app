@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "162597180069",
+    "project_id": "point-of-sales-786ed",
+    "storage_bucket": "point-of-sales-786ed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:162597180069:android:b0e052b44464748f5ef34c",
+        "android_client_info": {
+          "package_name": "com.egposapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "162597180069-97r8rvo7hhfd4115a5ribs5gicgvk12d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClfscsPDI-kL4X0PyjeFp1MVJ1FcATKuw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "162597180069-97r8rvo7hhfd4115a5ribs5gicgvk12d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

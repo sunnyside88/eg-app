@@ -29,7 +29,9 @@ const CreateGrForm = ({ route, navigation }) => {
     alert(qty);
   };
 
-  async function createGr() {}
+  async function createGr() {
+      
+  }
 
   return (
     <View style={styles.container}>
