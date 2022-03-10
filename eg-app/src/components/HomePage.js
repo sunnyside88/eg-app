@@ -17,10 +17,11 @@ const HomePage = ({ navigation }) => {
 
   useEffect(() => {
     getProducts();
-  }, []);
+  },[]);
+
   async function getProducts() {
-    axios
-      .get("http://192.168.68.111:8000/api/products", { crossdomain: true })
+    await axios
+      .get("http://192.168.1.12:8000/api/products", { crossdomain: true })
       .then((res) => {
         let data = res.data;
         data.forEach(function (element, index) {
@@ -34,6 +35,7 @@ const HomePage = ({ navigation }) => {
         });
       });
   }
+
   return (
     <View style={styles.container}>
       <View style={styles.box}>
@@ -82,8 +84,8 @@ const styles = StyleSheet.create({
 
   btn: {
     marginLeft: 15,
-    paddingLeft:5,
-    paddingRight:5,
+    paddingLeft: 5,
+    paddingRight: 5,
     width: 115,
     height: 50,
     alignItems: "center",

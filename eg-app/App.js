@@ -14,6 +14,7 @@ import HomePage from "./src/components/HomePage";
 import ScanForm from "./src/components/Update/ScanForm";
 import rootReducer from './src/reducers';
 import CreateGrForm from "./src/components/Update/CreateGrForm";
+import GrSummary from "./src/components/Update/GrSummary";
 
 export default function App() {
   const store = createStore(rootReducer);
@@ -42,6 +43,11 @@ export default function App() {
             name="CreateGrForm"
             component={CreateGrForm}
             options={{ title: "Step 2: Update Stock" }}
+          />
+          <Stack.Screen
+            name="GrSummary"
+            component={GrSummary}
+            options={{ title: "Step 3: Confirm GR" }}
           />
         </Stack.Navigator>
       </NavigationContainer>

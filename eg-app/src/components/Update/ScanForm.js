@@ -9,19 +9,23 @@ import {
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useSelector } from "react-redux";
 import * as ImagePicker from "expo-image-picker";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function ScanForm({ navigation }) {
   const { products } = useSelector((state) => state.products);
-  const [scannedCode, setScannedCode] = useState("");
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === "granted");
     })();
-  }, []);
+    if(products.length>0){
+      console.log(products[0].products);
+    }
+  });
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -34,12 +38,14 @@ export default function ScanForm({ navigation }) {
       const product = products[0].products.find((x) => x.code == res[0].data);
       if (!product) {
         alert(`Product with ${res[0].data} not found `);
+        setScanned(false);
         return;
       } else {
         navigation.navigate("CreateGrForm", {
           productId: product._id,
           productCode: product.code,
           productName: product.name,
+          productUom: product.uom
         });
       }
     } else {
@@ -52,12 +58,15 @@ export default function ScanForm({ navigation }) {
     const product = products[0].products.find((x) => x.code == data);
     if (!product) {
       alert(`Product with ${data} not found `);
+      setScanned(false);
       return;
     } else {
+      setScanned(false);
       navigation.navigate("CreateGrForm", {
         productId: product._id,
         productCode: product.code,
         productName: product.name,
+        productUom: product.uom
       });
     }
   };
@@ -72,10 +81,12 @@ export default function ScanForm({ navigation }) {
   return (
     <View>
       <View style={styles.container}>
-        <BarCodeScanner
-          onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-          style={StyleSheet.absoluteFillObject}
-        />
+        {isFocused && (
+          <BarCodeScanner
+            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+            style={StyleSheet.absoluteFillObject}
+          />
+        )}
       </View>
       <View style={styles.barContainer}>
         <TouchableHighlight onPress={pickImage}>

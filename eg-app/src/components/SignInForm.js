@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { auth } from "../../firebase";
 import {
@@ -12,6 +12,7 @@ import {
   Button,
 } from "react-native";
 import logo from "../../assets/Logo.png";
+import { useDispatch } from "react-redux";
 
 const SignInForm = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -19,6 +20,11 @@ const SignInForm = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showText, setShowText] = useState(true);
   const [hidePass, setHidePass] = useState(true);
+  let dispatch = useDispatch();
+
+  useEffect(() => {
+    return () => {};
+  }, []);
 
   const handleLogIn = async () => {
     try {
@@ -36,6 +42,12 @@ const SignInForm = ({ navigation }) => {
       const { user } = res;
       const idTokenResult = await user.getIdTokenResult();
       if (user) {
+        dispatch({
+          type: "LOGGED_IN",
+          payload: {
+            user: user.email,
+          },
+        });
         navigation.navigate("Home");
         navigation.reset({
           index: 0,
@@ -43,6 +55,7 @@ const SignInForm = ({ navigation }) => {
         });
       }
     } catch (err) {
+      console.log(err);
       alert("User not found!");
       setIsLoading(false);
       setShowText(true);
@@ -55,8 +68,7 @@ const SignInForm = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Image style={styles.image} source={logo}></Image>
-      <View>
-      </View>
+      <View></View>
       <View style={styles.box}>
         <View style={styles.inputView}>
           <TextInput
@@ -75,8 +87,7 @@ const SignInForm = ({ navigation }) => {
             placeholder="Enter Password"
             placeholderTextColor="#003f5c"
             onChangeText={(text) => setPassword(text)}
-          >
-          </TextInput>
+          ></TextInput>
         </View>
         <TouchableHighlight onPress={handleLogIn}>
           <View style={styles.loginBtn}>
@@ -84,7 +95,7 @@ const SignInForm = ({ navigation }) => {
               {showText == true ? (
                 "Sign In"
               ) : (
-                <ActivityIndicator size="small" animating={isLoading} />
+                <ActivityIndicator  color="#0000ff" size="small" animating={isLoading} />
               )}
             </Text>
           </View>

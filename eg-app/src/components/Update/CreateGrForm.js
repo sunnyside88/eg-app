@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 
 import axios from "axios";
 import {
@@ -10,28 +10,60 @@ import {
   Button,
   Text,
 } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const CreateGrForm = ({ route, navigation }) => {
+  const { gr_lines } = useSelector((state) => state.gr_lines);
+  const [tempLines, setTempLines] = useState([]);
   const { productId } = route.params;
   const { productCode } = route.params;
   const { productName } = route.params;
+  const { productUom } = route.params;
+
   const [qty, setQty] = useState("");
+  let dispatch = useDispatch();
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (gr_lines.length > 0) {
+      setTempLines(gr_lines[0].gr_lines);
+    }
+  }, []);
 
-  const handleDone = () => {
+  const handleNavigation = (destination) => {
     if (!qty) {
       alert("Missing Qty!");
       return;
     }
-    console.log(qty);
-    alert(qty);
+    let lines = []
+    if(tempLines.length>0){
+      lines = JSON.parse(JSON.stringify(tempLines))
+    }
+    if (lines.length>0 && lines.some((e) => e.product_id == productId)) {
+      let foundIndex = lines.findIndex((x) => x.product_id == productId);
+      lines[foundIndex].qty = parseInt(lines[foundIndex].qty) + parseInt(qty);
+    }
+    else{
+      lines.push({
+        product_id: productId,
+        product_name: productName,
+        product_code: productCode,
+        uom:productUom,
+        qty: qty,
+      });
+    } 
+    console.log(lines, "xxxlines");
+    dispatch({
+      type: "STOCK_CARD",
+      payload: {
+        gr_lines: lines,
+      },
+    });
+    if (destination === "addMore") {
+      navigation.goBack();
+    } else {
+      navigation.navigate("GrSummary")
+    }
   };
-
-  async function createGr() {
-      
-  }
 
   return (
     <View style={styles.container}>
@@ -68,11 +100,18 @@ const CreateGrForm = ({ route, navigation }) => {
             placeholderTextColor="#003f5c"
           />
         </View>
-        <TouchableHighlight onPress={handleDone}>
-          <View style={styles.loginBtn}>
-            <Text>Done</Text>
-          </View>
-        </TouchableHighlight>
+        <View style={styles.btnBox}>
+          <TouchableHighlight onPress={()=>handleNavigation("addMore")}>
+            <View style={styles.loginBtn}>
+              <Text>Add More</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight onPress={()=>handleNavigation("")}>
+            <View style={styles.loginBtn}>
+              <Text>Done</Text>
+            </View>
+          </TouchableHighlight>
+        </View>
       </View>
     </View>
   );
@@ -87,6 +126,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffff",
     alignItems: "center",
     justifyContent: "center",
+  },
+
+  btnBox: {
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "white",
+    flexDirection: "row",
   },
 
   box: {
@@ -127,6 +173,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 25,
     borderColor: "#151D3B",
+    margin: 10,
   },
 });
 export default CreateGrForm;
