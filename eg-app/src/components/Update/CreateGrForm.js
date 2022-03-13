@@ -24,7 +24,7 @@ const CreateGrForm = ({ route, navigation }) => {
   let dispatch = useDispatch();
 
   useEffect(() => {
-    if (gr_lines.length > 0) {
+    if (gr_lines.length > 0) {  
       setTempLines(gr_lines[0].gr_lines);
     }
   }, []);
@@ -51,7 +51,6 @@ const CreateGrForm = ({ route, navigation }) => {
         qty: qty,
       });
     } 
-    console.log(lines, "xxxlines");
     dispatch({
       type: "STOCK_CARD",
       payload: {

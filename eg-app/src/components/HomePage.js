@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { useIsFocused } from '@react-navigation/native'
 import axios from "axios";
 import {
   View,
@@ -14,10 +14,11 @@ import { useDispatch } from "react-redux";
 
 const HomePage = ({ navigation }) => {
   let dispatch = useDispatch();
-
+  const isFocused = useIsFocused()
   useEffect(() => {
     getProducts();
-  },[]);
+    getGr();
+  },[isFocused]);
 
   async function getProducts() {
     await axios
@@ -31,6 +32,23 @@ const HomePage = ({ navigation }) => {
           type: "REFRESH_PRODUCT_LIST",
           payload: {
             products: data,
+          },
+        });
+      });
+  }
+
+  async function getGr() {
+    axios
+      .get("http://192.168.1.12:8000/api/grs", { crossdomain: true })
+      .then((res) => {
+        let data = res.data;
+        data.forEach(function (element, index) {
+          Object.assign(element, { key: index });
+        });
+        dispatch({
+          type: "REFRESH_GR_LIST",
+          payload: {
+            grs: data,
           },
         });
       });
@@ -53,7 +71,7 @@ const HomePage = ({ navigation }) => {
           />
         </View>
         <View style={styles.item}>
-          <TouchableHighlight>
+          <TouchableHighlight onPress={() => navigation.navigate("GrList")}>
             <View style={styles.btn}>
               <Text>View Receipts</Text>
             </View>

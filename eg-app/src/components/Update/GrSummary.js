@@ -54,7 +54,6 @@ const GrSummary = ({ route, navigation }) => {
 
   useEffect(() => {
     if (gr_lines.length > 0) {
-      console.log("setset", gr_lines[0].gr_lines);
     }
   }, [gr_lines]);
 

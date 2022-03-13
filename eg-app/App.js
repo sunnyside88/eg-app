@@ -15,6 +15,9 @@ import ScanForm from "./src/components/Update/ScanForm";
 import rootReducer from './src/reducers';
 import CreateGrForm from "./src/components/Update/CreateGrForm";
 import GrSummary from "./src/components/Update/GrSummary";
+import GrList from "./src/components/View/GrList";
+import GrDetails from "./src/components/View/GrDetails";
+
 
 export default function App() {
   const store = createStore(rootReducer);
@@ -48,6 +51,16 @@ export default function App() {
             name="GrSummary"
             component={GrSummary}
             options={{ title: "Step 3: Confirm GR" }}
+          />
+          <Stack.Screen
+            name="GrList"
+            component={GrList}
+            options={{ title: "GR List" }}
+          />
+          <Stack.Screen
+            name="GrDetails"
+            component={GrDetails}
+            options={{ title: "Details" }}
           />
         </Stack.Navigator>
       </NavigationContainer>

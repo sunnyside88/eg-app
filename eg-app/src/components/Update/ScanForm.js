@@ -23,7 +23,6 @@ export default function ScanForm({ navigation }) {
       setHasPermission(status === "granted");
     })();
     if(products.length>0){
-      console.log(products[0].products);
     }
   });
 
