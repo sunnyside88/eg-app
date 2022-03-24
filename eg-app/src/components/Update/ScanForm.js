@@ -32,7 +32,9 @@ export default function ScanForm({ navigation }) {
       aspect: [4, 3],
       quality: 1,
     });
+    console.log(result,"xxxresult")
     const res = await BarCodeScanner.scanFromURLAsync(result.uri);
+    console.log(res,"xxxres")
     if (res[0].data) {
       const product = products[0].products.find((x) => x.code == res[0].data);
       if (!product) {

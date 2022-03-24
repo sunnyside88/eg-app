@@ -101,7 +101,7 @@ const SignInForm = ({ navigation }) => {
           </View>
         </TouchableHighlight>
       </View>
-      <Button title="shortcut" onPress={() => navigation.navigate("Home")} />
+      {/* <Button title="shortcut" onPress={() => navigation.navigate("Home")} /> */}
     </View>
   );
 };

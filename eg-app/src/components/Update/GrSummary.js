@@ -77,7 +77,7 @@ const GrSummary = ({ route, navigation }) => {
       createdBy: user[0].user,
     };
     await updateProductStockCount();
-    let res = await axios.post("http://192.168.1.12:8000/api/gr/insertOne", {
+    let res = await axios.post("http://192.168.1.14:8000/api/gr/insertOne", {
       data: data,
     });
     return res.data._id;
@@ -86,12 +86,12 @@ const GrSummary = ({ route, navigation }) => {
   const updateProductStockCount = async () => {
     gr_lines[0].gr_lines.map(async (x) => {
       let res = await axios.get(
-        `http://192.168.1.12:8000/api/products/${x.product_id}`
+        `http://192.168.1.14:8000/api/products/${x.product_id}`
       );
       let newStockUpdate = {
           stock_qty:parseInt(res.data.stock_qty) + parseInt(x.qty)
       }
-      let updateRes = await axios.post(`http://192.168.1.12:8000/api/products/update/${x.product_id}`,{
+      let updateRes = await axios.post(`http://192.168.1.14:8000/api/products/update/${x.product_id}`,{
           data:newStockUpdate,
       })
     });
