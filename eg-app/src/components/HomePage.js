@@ -22,7 +22,7 @@ const HomePage = ({ navigation }) => {
 
   async function getProducts() {
     await axios
-      .get("http://192.168.1.14:8000/api/products", { crossdomain: true })
+      .get("http://fast-shore-47363.herokuapp.com/api/products", { crossdomain: true })
       .then((res) => {
         let data = res.data;
         data.forEach(function (element, index) {
@@ -39,7 +39,7 @@ const HomePage = ({ navigation }) => {
 
   async function getGr() {
     axios
-      .get("http://192.168.1.14:8000/api/grs", { crossdomain: true })
+      .get("http://fast-shore-47363.herokuapp.com/api/grs", { crossdomain: true })
       .then((res) => {
         let data = res.data;
         data.forEach(function (element, index) {
