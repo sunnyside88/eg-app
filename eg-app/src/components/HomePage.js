@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useIsFocused } from '@react-navigation/native'
+import { useIsFocused } from "@react-navigation/native";
 import axios from "axios";
 import {
   View,
@@ -10,19 +10,28 @@ import {
   Button,
   Text,
 } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const HomePage = ({ navigation }) => {
   let dispatch = useDispatch();
-  const isFocused = useIsFocused()
+  const [userToken, setUserToken] = useState("");
+  const { user } = useSelector((state) => state.user);
+  const isFocused = useIsFocused();
   useEffect(() => {
-    getProducts();
-    getGr();
-  },[isFocused]);
+    if (user) {
+      setUserToken(user[0].token);
+      getProducts();
+      getGr();
+    }
+  }, [isFocused,user]);
 
   async function getProducts() {
     await axios
-      .get("http://fast-shore-47363.herokuapp.com/api/products", { crossdomain: true })
+      .get(
+        "http://fast-shore-47363.herokuapp.com/api/products",
+        { headers: { userToken: `${userToken}` } },
+        { crossdomain: true }
+      )
       .then((res) => {
         let data = res.data;
         data.forEach(function (element, index) {
@@ -39,7 +48,9 @@ const HomePage = ({ navigation }) => {
 
   async function getGr() {
     axios
-      .get("http://fast-shore-47363.herokuapp.com/api/grs", { crossdomain: true })
+      .get("http://fast-shore-47363.herokuapp.com/api/grs", {
+        crossdomain: true,
+      })
       .then((res) => {
         let data = res.data;
         data.forEach(function (element, index) {

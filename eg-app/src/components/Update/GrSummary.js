@@ -48,6 +48,7 @@ const showAlert = ({ navigation, dispatch }) =>
 
 const GrSummary = ({ route, navigation }) => {
   const { gr_lines } = useSelector((state) => state.gr_lines);
+  const [userToken, setUserToken] = useState("");
   const { user } = useSelector((state) => state.user);
 
   let dispatch = useDispatch();
@@ -55,7 +56,10 @@ const GrSummary = ({ route, navigation }) => {
   useEffect(() => {
     if (gr_lines.length > 0) {
     }
-  }, [gr_lines]);
+    if (user) {
+      setUserToken(user.token);
+    }
+  }, [gr_lines, user]);
 
   const renderItem = ({ item }) => {
     return (
@@ -77,23 +81,28 @@ const GrSummary = ({ route, navigation }) => {
       createdBy: user[0].user,
     };
     await updateProductStockCount();
-    let res = await axios.post("http://fast-shore-47363.herokuapp.com/api/gr/insertOne", {
-      data: data,
-    });
+    let res = await axios.post(
+      "http://fast-shore-47363.herokuapp.com/api/gr/insertOne",
+      { data: data },
+      { headers: { userToken: `${userToken}` } }
+    );
     return res.data._id;
   };
 
   const updateProductStockCount = async () => {
     gr_lines[0].gr_lines.map(async (x) => {
       let res = await axios.get(
-        `http://fast-shore-47363.herokuapp.com/api/products/${x.product_id}`
+        `http://fast-shore-47363.herokuapp.com/api/products/${x.product_id}`,
+        { headers: { userToken: `${userToken}` } }
       );
       let newStockUpdate = {
-          stock_qty:parseInt(res.data.stock_qty) + parseInt(x.qty)
-      }
-      let updateRes = await axios.post(`http://fast-shore-47363.herokuapp.com/api/products/update/${x.product_id}`,{
-          data:newStockUpdate,
-      })
+        stock_qty: parseInt(res.data.stock_qty) + parseInt(x.qty),
+      };
+      let updateRes = await axios.post(
+        `http://fast-shore-47363.herokuapp.com/api/products/update/${x.product_id}`,
+        { data: newStockUpdate },
+        { headers: { userToken: `${userToken}` } }
+      );
     });
   };
 

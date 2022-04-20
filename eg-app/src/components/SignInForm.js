@@ -46,6 +46,7 @@ const SignInForm = ({ navigation }) => {
           type: "LOGGED_IN",
           payload: {
             user: user.email,
+            token: idTokenResult.token,
           },
         });
         navigation.navigate("Home");
